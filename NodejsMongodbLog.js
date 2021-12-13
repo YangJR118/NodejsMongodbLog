@@ -1,22 +1,29 @@
 const express = require("express")//引进express
-const app=express()
+const app = express()
 const mongoose = require('mongoose');//引进mongoose
+const ejs = require("ejs")
 mongoose.connect('mongodb://172.21.2.236:27017/190110890317');//连接数据库
-const schema={
-    name:String,
-    age:Number,
-    health:String,
-    hobby:String
+const schema = {
+    name: String,
+    age: Number,
+    health: String,
+    hobby: String
 }
-const mydata = mongoose.model('cat1s',schema );
+const mydata = mongoose.model('cat1s', schema);
 // const kitty = new mydata({ name: 'testZildjian2' });
 // kitty.save()
 
 app.use('/', express.static('public'))
-app.get("/input",(req,res)=>{
-     res.send(req.query)
-     console.log(req.query)
-     const kitty = new mydata({ name: req.query.first,health:req.query.second });
-     kitty.save()
+app.get("/input", (req, res) => {
+    res.send(req.query)
+    console.log(req.query)
+    const kitty = new mydata({ name: req.query.first, health: req.query.second });
+    kitty.save()
+    // ejs.renderFile(filename, data, options, function (err, str) {
+    //     //str => 输出渲染后的 HTML 字符串
+    // });
+    ejs.renderFile("result.html",{returnVal:"success"},(err,str)=>{
+        res.send(str)
+    })
 })
 app.listen(50317)
